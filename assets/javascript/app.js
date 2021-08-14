@@ -1,7 +1,115 @@
+// have a list of questions-Done
+
+// each question have 4 possible answers, only 1 is correct-Done
+var Question1 = {
+    question: "Mario made his debut in Donkey Kong. What was his name in that game??" ,
+    a1: "Super Plumber" ,
+    a2: "Mike" ,
+    a3: "Jumpman" ,
+    a4: "Monkey Trainer" ,
+    correctA: function() {
+        return this.a3
+    },
+}
+
+// each question have 4 possible answers, only 1 is correct-Done
+var Question2 = {
+    question: "Which of the following is not part of the three golden triangle pieces that make up the Triforce as a whole?" ,
+    a1: "The Triforce of Power" ,
+    a2: "The Triforce of Strength" ,
+    a3: "The Triforce of Wisdom" ,
+    a4: "The Triforce of Courage." ,
+    correctA: function() {
+        return this.a2
+    }
+}
+
+// each question have 4 possible answers, only 1 is correct-Done
+var Question3 = {
+    question: "Which of the following Donkey Kong Characters was the Original Donkey Kong in the Arcade Game?" ,
+    a1: "Funkey Kong" ,
+    a2: "Donkey Kong" ,
+    a3: "Diddy Kong" ,
+    a4: "Cranky Kong" ,
+    correctA: function() {
+        return this.a4
+    }
+}
+
+// each question have 4 possible answers, only 1 is correct-Done
+var Question4 = {
+    question: "Who is the final boss in the first Metroid game?" ,
+    a1: "Emperor Ing" ,
+    a2: "Ridley" ,
+    a3: "Mother Brain " ,
+    a4: "Metroid" ,
+    correctA: function() {
+        return this.a3
+    }
+}
+
+// each question have 4 possible answers, only 1 is correct-Done
+var Question5 = {
+    question: "Which of the following isn't a Yoshi color??" ,
+    a1: "Gold" ,
+    a2: "Yellow" ,
+    a3: "Black" ,
+    a4: "Orange" ,
+    correctA: function() {
+        return this.a1
+    }
+}
+
+// each question have 4 possible answers, only 1 is correct-Done
+var Question6 = {
+    question: "What was Kirby name after?" ,
+    a1: "A Vaccumm" ,
+    a2: "A Ball" ,
+    a3: "A Painter" ,
+    a4: "A Lawyer" ,
+    correctA: function() {
+        return this.a4
+    }
+}
+
+// each question have 4 possible answers, only 1 is correct-Done
+var Question7 = {
+    question: "Which of the following is not a member of the Star Fox Team?" ,
+    a1: "Falco Lombardi" ,
+    a2: "Wolf O'Donnell" ,
+    a3: "Slippy Toad" ,
+    a4: "Peppy Hare" ,
+    correctA: function() {
+        return this.a2
+    }
+}
+
+// each question have 4 possible answers, only 1 is correct-Done
+var Question8 = {
+    question: "What type of Pokémon is Pikachu not effective against??" ,
+    a1: "Flying-Type" ,
+    a2: "Bug-Type" ,
+    a3: "Normal-Type" ,
+    a4: "Ground-Type" ,
+    correctA: function() {
+        return this.a4
+    }
+}
+
+var questionArray = [Question1 , Question2 , Question3 , Question4 , Question5 , Question6 , Question7 , Question8]
+
 //click the start button to start
-// have a list of questions
-// each question have 4 possible answers, only 1 is correct
+$("#start-button").on("click" , function() {
+    askQuestion(Question1);
+})
+
 // ask the question from the list of questions
+function askQuestion(object) {
+    var questionAsk = object.question;
+    $("#Question").text(questionAsk);
+}
+
+
 // provide the list of answers
 // the player is given 30 seconds to answer
 // the player chooses one of the 4 possible answers
