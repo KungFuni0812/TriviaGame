@@ -114,7 +114,7 @@ function decrement() {
 
     timer--;
 
-    $("#Timer").html("<h2>" + "Time Remaining: " + timer + "</h2>");
+    $("#Timer").html("<h2 id='timer-h2'>" + "Time Remaining: " + timer + "</h2>");
     // if they run out of time, say "you didn't answer", show the right answer-Done
     if(timer === 0) {
         timeouts++;
@@ -129,13 +129,13 @@ function decrement() {
 
 //click the start button to start
 $("#start-button").on("click" , function() {
-    $("#Timer").html("<h2>" + "Time Remaining: " + timer + "</h2>");
     askQuestion(Question1);
 })
 
 // ask the question from the list of questions-Done
 function askQuestion(object) {
     timer = 30;
+    $("#Timer").html("<h2 id='timer-h2'>" + "Time Remaining: " + timer + "</h2>");
     currentQuestion = object;
     var questionAsk = object.question;
     $("#Question").text(questionAsk);
@@ -176,20 +176,35 @@ function nextQ() {
     if (nextQuestion != undefined) {
         askQuestion(nextQuestion);
     } else {
+        $("#timer-h2").remove()
         // do your jquery shit to show the end of game results.
+        $(".Answers").html(
+            `<div class="col">
+                <div class="row justify-content-center">
+                    <p id="correctP"></p>
+                </div>
+                <div class="row justify-content-center">
+                    <p id="incorrectP"></p>
+                </div>
+                <div class="row justify-content-center">
+                    <p id="timeoutsP"></p>
+                </div>
+                <div class="row justify-content-center">
+                    <button class="btn btn-primary" id="restartBtn">Restart?</button>
+                </div>
+            </div>`)
             // display correct
+        $("#correctP").text("Correct: " + correct);
             // display incorrect
+        $("#incorrectP").text("Incorrect: " + incorrect);
             // display timeouts
+        $("#timeoutsP").text("Timeouts: " + timeouts);
             // display a restart button
-        console.log("game is complete!  results: ")
-        console.log('Right: ' + correct)
-        console.log('Wrong: ' + incorrect)
-        console.log('Timeouts: ' + timeouts)
     }
 }
     
 // click the "restart" button to restart the game without reloading the page
-$(document).on("click", "#restart", function() {
+$(document).on("click", "#restartBtn", function() {
     // remove the restart button and clear all text
     // reset counters
     correct = 0;
