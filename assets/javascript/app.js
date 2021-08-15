@@ -98,20 +98,28 @@ var Question8 = {
 
 var questionArray = [Question1 , Question2 , Question3 , Question4 , Question5 , Question6 , Question7 , Question8]
 
-var Timer = 30;
+var timer = 30;
 
 var intervalId;
 
+var currentQuestion;
+
 function decrement() {
 
-    Timer--;
+    timer--;
 
-    $("#Timer").html("<h2>" + "Time Remaining: " + Timer + "</h2>");
+    $("#Timer").html("<h2>" + "Time Remaining: " + timer + "</h2>");
+    // if they run out of time, say "you didn't answer", show the right answer-Done
+    if(timer === 0) {
+        clearInterval(intervalId);
+        $("#Question, .Answer").remove()
+        $(".Answers").html('<p class="mx-4 timeOutMessage">' + "Out of Time!" + '</p>'+ '<p class="mx-4 loseMessage">' + " The Correct Answer was: " + currentQuestion.correctA()+ '</p>')
+    }
 }
 
 //click the start button to start
 $("#start-button").on("click" , function() {
-    $("#Timer").html("<h2>" + "Time Remaining: " + Timer + "</h2>");
+    $("#Timer").html("<h2>" + "Time Remaining: " + timer + "</h2>");
     // the player is given 30 seconds to answer-Done
     intervalId = setInterval(decrement, 1000);
     askQuestion(Question1);
@@ -119,6 +127,7 @@ $("#start-button").on("click" , function() {
 
 // ask the question from the list of questions-Done
 function askQuestion(object) {
+    currentQuestion = object;
     var questionAsk = object.question;
     $("#Question").text(questionAsk);
     var a1 = object.a1;
@@ -132,15 +141,23 @@ function askQuestion(object) {
 // the player chooses one of the 4 possible answers-Done
 $(document).on("click", ".possibleAns", function() {
     clearInterval(intervalId);
-    console.log(this);
-
+    var answerSelected = $(this).text();
+    $("#Question, .Answer").remove();
+    if(answerSelected === currentQuestion.correctA()) {
+        // if they are right, say "you're right"-Done
+        $(".Answers").html('<p class="mx-2 winMessage">' + "Correct!" + '</p>')
+    }else {
+        // if they choose the wrong answer, show the right answer and tell them they are wrong-Done
+        $(".Answers").html('<p class="mx-2 loseMessage">' + "Nope!" + '</p>'+ '<p class="mx-2 loseMessage">' + " The Correct Answer was: " + currentQuestion.correctA()+ '</p>')
+    }
 })
 
 
 
-    // if they choose the wrong answer, show the right answer and tell them they are wrong
-    // if they are right, say "you're right"
-    // if they run out of time, say "you didn't answer", show the right answer
+
+    
+    
+    
 // go to the next question
 // continue doing that until they answer all the questions
 // tell the player how many right, how many wrong, and ask if they want to start the game again
