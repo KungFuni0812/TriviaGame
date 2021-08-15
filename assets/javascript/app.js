@@ -98,21 +98,46 @@ var Question8 = {
 
 var questionArray = [Question1 , Question2 , Question3 , Question4 , Question5 , Question6 , Question7 , Question8]
 
+var Timer = 30;
+
+var intervalId;
+
+function decrement() {
+
+    Timer--;
+
+    $("#Timer").html("<h2>" + "Time Remaining: " + Timer + "</h2>");
+}
+
 //click the start button to start
 $("#start-button").on("click" , function() {
+    $("#Timer").html("<h2>" + "Time Remaining: " + Timer + "</h2>");
+    // the player is given 30 seconds to answer-Done
+    intervalId = setInterval(decrement, 1000);
     askQuestion(Question1);
 })
 
-// ask the question from the list of questions
+// ask the question from the list of questions-Done
 function askQuestion(object) {
     var questionAsk = object.question;
     $("#Question").text(questionAsk);
+    var a1 = object.a1;
+    var a2 = object.a2;
+    var a3 = object.a3;
+    var a4 = object.a4;
+    // provide the list of answers-Done
+    $(".Answers").html('<p class="mx-2 possibleAns">'+a1+'</p><p class="mx-2 possibleAns">'+a2+'</p><p class="mx-2 possibleAns">'+a3+'</p><p class="mx-2 possibleAns">'+a4+'</p>')
 }
 
+// the player chooses one of the 4 possible answers-Done
+$(document).on("click", ".possibleAns", function() {
+    clearInterval(intervalId);
+    console.log(this);
 
-// provide the list of answers
-// the player is given 30 seconds to answer
-// the player chooses one of the 4 possible answers
+})
+
+
+
     // if they choose the wrong answer, show the right answer and tell them they are wrong
     // if they are right, say "you're right"
     // if they run out of time, say "you didn't answer", show the right answer
