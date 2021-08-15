@@ -4,7 +4,7 @@
 var Question1 = {
     question: "Mario made his debut in Donkey Kong. What was his name in that game??" ,
     a1: "Super Plumber" ,
-    a2: "Mike" ,
+    a2: "Mario" ,
     a3: "Jumpman" ,
     a4: "Monkey Trainer" ,
     correctA: function() {
@@ -14,7 +14,7 @@ var Question1 = {
 
 // each question have 4 possible answers, only 1 is correct-Done
 var Question2 = {
-    question: "Which of the following is not part of the three golden triangle pieces that make up the Triforce as a whole?" ,
+    question: "Which of the following is not part of the three golden triangle pieces that make up the Triforce?" ,
     a1: "The Triforce of Power" ,
     a2: "The Triforce of Strength" ,
     a3: "The Triforce of Wisdom" ,
@@ -27,7 +27,7 @@ var Question2 = {
 // each question have 4 possible answers, only 1 is correct-Done
 var Question3 = {
     question: "Which of the following Donkey Kong Characters was the Original Donkey Kong in the Arcade Game?" ,
-    a1: "Funkey Kong" ,
+    a1: "Funky Kong" ,
     a2: "Donkey Kong" ,
     a3: "Diddy Kong" ,
     a4: "Cranky Kong" ,
@@ -41,7 +41,7 @@ var Question4 = {
     question: "Who is the final boss in the first Metroid game?" ,
     a1: "Emperor Ing" ,
     a2: "Ridley" ,
-    a3: "Mother Brain " ,
+    a3: "Mother Brain" ,
     a4: "Metroid" ,
     correctA: function() {
         return this.a3
@@ -63,7 +63,7 @@ var Question5 = {
 // each question have 4 possible answers, only 1 is correct-Done
 var Question6 = {
     question: "What was Kirby name after?" ,
-    a1: "A Vaccumm" ,
+    a1: "A Vacuum" ,
     a2: "A Ball" ,
     a3: "A Painter" ,
     a4: "A Lawyer" ,
@@ -87,10 +87,10 @@ var Question7 = {
 // each question have 4 possible answers, only 1 is correct-Done
 var Question8 = {
     question: "What type of Pokémon is Pikachu not effective against??" ,
-    a1: "Flying-Type" ,
-    a2: "Bug-Type" ,
-    a3: "Normal-Type" ,
-    a4: "Ground-Type" ,
+    a1: "Flying Type" ,
+    a2: "Bug Type" ,
+    a3: "Normal Type" ,
+    a4: "Ground Type" ,
     correctA: function() {
         return this.a4
     }
@@ -99,6 +99,12 @@ var Question8 = {
 var questionArray = [Question1 , Question2 , Question3 , Question4 , Question5 , Question6 , Question7 , Question8]
 
 var timer = 30;
+
+var correct = 0;
+
+var incorrect = 0;
+
+var timeouts = 0;
 
 var intervalId;
 
@@ -111,22 +117,25 @@ function decrement() {
     $("#Timer").html("<h2>" + "Time Remaining: " + timer + "</h2>");
     // if they run out of time, say "you didn't answer", show the right answer-Done
     if(timer === 0) {
+        timeouts++;
         clearInterval(intervalId);
-        $("#Question, .Answer").remove()
+        $("#Question").text('');
+        $(".possibleAns").remove()
         $(".Answers").html('<p class="mx-4 timeOutMessage">' + "Out of Time!" + '</p>'+ '<p class="mx-4 loseMessage">' + " The Correct Answer was: " + currentQuestion.correctA()+ '</p>')
+        setTimeout(nextQ, 3000);
     }
+
 }
 
 //click the start button to start
 $("#start-button").on("click" , function() {
     $("#Timer").html("<h2>" + "Time Remaining: " + timer + "</h2>");
-    // the player is given 30 seconds to answer-Done
-    intervalId = setInterval(decrement, 1000);
     askQuestion(Question1);
 })
 
 // ask the question from the list of questions-Done
 function askQuestion(object) {
+    timer = 30;
     currentQuestion = object;
     var questionAsk = object.question;
     $("#Question").text(questionAsk);
@@ -134,6 +143,8 @@ function askQuestion(object) {
     var a2 = object.a2;
     var a3 = object.a3;
     var a4 = object.a4;
+    // the player is given 30 seconds to answer-Done
+    intervalId = setInterval(decrement, 1000);
     // provide the list of answers-Done
     $(".Answers").html('<p class="mx-2 possibleAns">'+a1+'</p><p class="mx-2 possibleAns">'+a2+'</p><p class="mx-2 possibleAns">'+a3+'</p><p class="mx-2 possibleAns">'+a4+'</p>')
 }
@@ -142,25 +153,47 @@ function askQuestion(object) {
 $(document).on("click", ".possibleAns", function() {
     clearInterval(intervalId);
     var answerSelected = $(this).text();
-    $("#Question, .Answer").remove();
+    $("#Question").text('');
+    $(".possibleAns").remove();
     if(answerSelected === currentQuestion.correctA()) {
         // if they are right, say "you're right"-Done
         $(".Answers").html('<p class="mx-2 winMessage">' + "Correct!" + '</p>')
+        correct++;
+        setTimeout(nextQ, 3000);
     }else {
         // if they choose the wrong answer, show the right answer and tell them they are wrong-Done
-        $(".Answers").html('<p class="mx-2 loseMessage">' + "Nope!" + '</p>'+ '<p class="mx-2 loseMessage">' + " The Correct Answer was: " + currentQuestion.correctA()+ '</p>')
+        $(".Answers").html('<p class="mx-2 loseMessage">' + "Nope!" + '</p>'+ '<p class="mx-2 loseMessage">' + " The Correct Answer was: " + currentQuestion.correctA()+ '</p>');
+        incorrect++;
+        setTimeout(nextQ, 3000);
     }
 })
 
-
-
-
-    
-    
-    
 // go to the next question
-// continue doing that until they answer all the questions
-// tell the player how many right, how many wrong, and ask if they want to start the game again
 
-
-// 
+function nextQ() {
+    var indexOfCurrentQuestion = questionArray.indexOf(currentQuestion);
+    var nextQuestion = questionArray[indexOfCurrentQuestion+1];
+    if (nextQuestion != undefined) {
+        askQuestion(nextQuestion);
+    } else {
+        // do your jquery shit to show the end of game results.
+            // display correct
+            // display incorrect
+            // display timeouts
+            // display a restart button
+        console.log("game is complete!  results: ")
+        console.log('Right: ' + correct)
+        console.log('Wrong: ' + incorrect)
+        console.log('Timeouts: ' + timeouts)
+    }
+}
+    
+// click the "restart" button to restart the game without reloading the page
+$(document).on("click", "#restart", function() {
+    // remove the restart button and clear all text
+    // reset counters
+    correct = 0;
+    incorrect = 0;
+    timeouts = 0;
+    askQuestion(Question1);
+})
