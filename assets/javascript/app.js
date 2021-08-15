@@ -10,6 +10,7 @@ var Question1 = {
     correctA: function() {
         return this.a3
     },
+    gif: "./assets/images/mario.gif"
 }
 
 // each question have 4 possible answers, only 1 is correct-Done
@@ -21,7 +22,8 @@ var Question2 = {
     a4: "The Triforce of Courage." ,
     correctA: function() {
         return this.a2
-    }
+    },
+    gif: "./assets/images/link.gif"
 }
 
 // each question have 4 possible answers, only 1 is correct-Done
@@ -33,7 +35,8 @@ var Question3 = {
     a4: "Cranky Kong" ,
     correctA: function() {
         return this.a4
-    }
+    },
+    gif: "./assets/images/donkeykong.gif"
 }
 
 // each question have 4 possible answers, only 1 is correct-Done
@@ -45,7 +48,8 @@ var Question4 = {
     a4: "Metroid" ,
     correctA: function() {
         return this.a3
-    }
+    },
+    gif: "./assets/images/samus.gif"
 }
 
 // each question have 4 possible answers, only 1 is correct-Done
@@ -57,7 +61,8 @@ var Question5 = {
     a4: "Orange" ,
     correctA: function() {
         return this.a1
-    }
+    },
+    gif: "./assets/images/yoshi.gif"
 }
 
 // each question have 4 possible answers, only 1 is correct-Done
@@ -69,7 +74,8 @@ var Question6 = {
     a4: "A Lawyer" ,
     correctA: function() {
         return this.a4
-    }
+    },
+    gif: "./assets/images/kirby.gif"
 }
 
 // each question have 4 possible answers, only 1 is correct-Done
@@ -81,7 +87,8 @@ var Question7 = {
     a4: "Peppy Hare" ,
     correctA: function() {
         return this.a2
-    }
+    },
+    gif: "./assets/images/fox.gif"
 }
 
 // each question have 4 possible answers, only 1 is correct-Done
@@ -93,7 +100,8 @@ var Question8 = {
     a4: "Ground Type" ,
     correctA: function() {
         return this.a4
-    }
+    },
+    gif: "./assets/images/pikachu.gif"
 }
 
 var questionArray = [Question1 , Question2 , Question3 , Question4 , Question5 , Question6 , Question7 , Question8]
@@ -110,6 +118,12 @@ var intervalId;
 
 var currentQuestion;
 
+var gameMusic = new Audio("./assets/audio/music.mp3");
+
+var correctSound = new Audio("./assets/audio/correct.mp3");
+
+var incorrectSound = new Audio("./assets/audio/fail.mp3");
+
 function decrement() {
 
     timer--;
@@ -121,7 +135,19 @@ function decrement() {
         clearInterval(intervalId);
         $("#Question").text('');
         $(".possibleAns").remove()
-        $(".Answers").html('<p class="mx-4 timeOutMessage">' + "Out of Time!" + '</p>'+ '<p class="mx-4 loseMessage">' + " The Correct Answer was: " + currentQuestion.correctA()+ '</p>')
+        // $(".Answers").html('<p class="mx-4 timeOutMessage">' + "Out of Time!" + '</p>'+ '<p class="mx-4 loseMessage">' + " The Correct Answer was: " + currentQuestion.correctA()+ '</p>')
+        $(".Answers").html(`        
+        <div class="col">
+            <div class="row justify-content-center">
+                <p class="mx-2 timeOutMessage">Out of Time!</p>
+            </div>
+            <div class="row justify-content-center">
+                <p class="mx-2 loseMessage">The Correct Answer was: ${currentQuestion.correctA()}</p>
+            </div>
+            <div class="row justify-content-center">
+                <img src="${currentQuestion.gif}">
+            </div>
+        </div>`)
         setTimeout(nextQ, 3000);
     }
 
@@ -129,6 +155,8 @@ function decrement() {
 
 //click the start button to start
 $("#start-button").on("click" , function() {
+    $("#start-button").attr("hidden", true);
+    gameMusic.play();
     askQuestion(Question1);
 })
 
@@ -146,7 +174,22 @@ function askQuestion(object) {
     // the player is given 30 seconds to answer-Done
     intervalId = setInterval(decrement, 1000);
     // provide the list of answers-Done
-    $(".Answers").html('<p class="mx-2 possibleAns">'+a1+'</p><p class="mx-2 possibleAns">'+a2+'</p><p class="mx-2 possibleAns">'+a3+'</p><p class="mx-2 possibleAns">'+a4+'</p>')
+    $(".Answers").html(`
+    <div class="col">
+        <div class="row justify-content-center">
+            <p class="mx-2 possibleAns">${a1}</p>
+        </div>
+        <div class="row justify-content-center">
+            <p class="mx-2 possibleAns">${a2}</p>
+        </div>
+        <div class="row justify-content-center">
+            <p class="mx-2 possibleAns">${a3}</p>
+        </div>
+        <div class="row justify-content-center">
+            <p class="mx-2 possibleAns">${a4}</p>
+        </div>
+    </div>`)
+
 }
 
 // the player chooses one of the 4 possible answers-Done
@@ -158,12 +201,35 @@ $(document).on("click", ".possibleAns", function() {
     if(answerSelected === currentQuestion.correctA()) {
         // if they are right, say "you're right"-Done
         $(".Answers").html('<p class="mx-2 winMessage">' + "Correct!" + '</p>')
+        $(".Answers").html(`
+        <div class="col">
+            <div class="row justify-content-center">
+                <p class="mx-2 winMessage">Correct!</p>
+            </div>
+            <div class="row justify-content-center">
+                <img src="${currentQuestion.gif}">
+            </div>
+        </div>`)
+        correctSound.play();
         correct++;
         setTimeout(nextQ, 3000);
     }else {
         // if they choose the wrong answer, show the right answer and tell them they are wrong-Done
-        $(".Answers").html('<p class="mx-2 loseMessage">' + "Nope!" + '</p>'+ '<p class="mx-2 loseMessage">' + " The Correct Answer was: " + currentQuestion.correctA()+ '</p>');
+        $(".Answers").html(`
+        <div class="col">
+            <div class="row justify-content-center">
+                <p class="mx-2 loseMessage">Nope!</p>
+            </div>
+            <div class="row justify-content-center">
+                <p class="mx-2 loseMessage">The Correct Answer was: ${currentQuestion.correctA()}</p>
+            </div>
+            <div class="row justify-content-center">
+                <img src="${currentQuestion.gif}">
+            </div>
+        </div>
+        `);
         incorrect++;
+        incorrectSound.play();
         setTimeout(nextQ, 3000);
     }
 })
@@ -210,5 +276,7 @@ $(document).on("click", "#restartBtn", function() {
     correct = 0;
     incorrect = 0;
     timeouts = 0;
+    gameMusic.pause();
+    gameMusic.play();
     askQuestion(Question1);
 })
